@@ -1,0 +1,7 @@
+{
+	"name": "ccb/XLSXWriter",
+	"description": "Clone of XLSXWriter library",
+	"autoload": {
+		"classmap": [ "XLSXWriter.php" ]
+	}
+}
