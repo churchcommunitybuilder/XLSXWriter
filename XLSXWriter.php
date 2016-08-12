@@ -244,7 +244,8 @@ Class XLSXWriter
 			}
 		}
 		$value = filter_var($value, FILTER_UNSAFE_RAW);
-		if (is_numeric($value)) {
+		$isLeftZeroNumberString = is_string($value) && strlen($value) != 0 && $value[0] == '0';
+		if (is_numeric($value) && !$isLeftZeroNumberString) {
 			fwrite($fd,'<c r="'.$cell.'" s="'.$s.'" t="n"><v>'.($value*1).'</v></c>');//int,float, etc
 		} else if ($format===14 && $value && $value != '-') {
 			fwrite($fd,'<c r="'.$cell.'" s="'.$s.'" t="n"><v>'.self::convert_date_time($value).'</v></c>');
