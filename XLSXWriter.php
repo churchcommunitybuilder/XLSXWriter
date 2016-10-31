@@ -244,8 +244,12 @@ Class XLSXWriter
 			}
 		}
 		$value = filter_var($value, FILTER_UNSAFE_RAW);
-		$isLeftZeroNumberString = is_string($value) && strlen($value) != 0 && $value[0] == '0';
-		if (is_numeric($value) && !$isLeftZeroNumberString) {
+		// If a value is numeric, but it's a whole number and has a leading zero, we want
+		// to not output it as a number. For instance, zip codes. If however it is just a 
+		// zero, or it is a decimal value that starts with zero, such as 0.75, we still 
+		// want to output it as a number.
+		$isLeadingZeroWholeNumberString = preg_match("/^0[0-9]+$/", $value);
+		if (is_numeric($value) && !$isLeadingZeroWholeNumberString) {
 			fwrite($fd,'<c r="'.$cell.'" s="'.$s.'" t="n"><v>'.($value*1).'</v></c>');//int,float, etc
 		} else if ($format===14 && $value && $value != '-') {
 			fwrite($fd,'<c r="'.$cell.'" s="'.$s.'" t="n"><v>'.self::convert_date_time($value).'</v></c>');
